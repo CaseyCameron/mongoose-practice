@@ -7,7 +7,7 @@ export default async (dbUrl = process.env.MONGODB_URL) => {
   }
   try {
     const db = await mongoose.connect(dbUrl)
-    console.log(`Connected to db at ${dbUrl}`)
+    console.log('Connected to db')
     return db
   } catch(err) {
     console.error('Error connecting to db')
