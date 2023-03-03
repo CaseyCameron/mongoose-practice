@@ -4,7 +4,7 @@ import helmet from 'helmet'
 import morgan from 'morgan'
 import heartbeat from './heartbeat'
 import mongoose from 'mongoose'
-import scalesRouter from './routes/scales'
+import scaleRouter from './routes/scales'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -18,7 +18,7 @@ app.use(morgan('dev'))
 app.use(express.json())
 
 app.get(routePrefix, heartbeat)
-app.use(routePrefix + '/scales', scalesRouter)
+app.use(routePrefix + '/scales', scaleRouter)
 mongoose.set('strictQuery', true)
 
 export default app
