@@ -1,22 +1,16 @@
 import { ModeDocument, Mode, Scale } from '../../../db/models'
-import { Types } from 'mongoose'
+import { NextFunction } from 'express'
 
-export const scaleToPost = {
-  name: 'Ionian',
-  modes: [
-    {
-      name: 'Dorian',
-    },
-  ],
-}
-
-export const checkForScaleErrors = async (modes: ModeDocument[]) => {
+export const checkForScaleErrors = async (
+  modes: ModeDocument[],
+  next: NextFunction
+) => {
   if (modes.length) {
     return await Promise.all(
       modes.map(async (modeName: ModeDocument) => {
         const mode = await Mode.findOne({ name: modeName.name })
         if (!mode) {
-          throw new Error(`${modeName.name} mode does not exist`)
+          return next(new Error(`${modeName.name} mode does not exist`))
         }
         return mode._id
       })

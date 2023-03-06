@@ -1,6 +1,5 @@
 import request from 'supertest'
 import app from '../src/app/app'
-import { scaleToPost } from '../src/app/utils/testing/scales'
 
 const routePrefix = '/api/v1'
 const mongooseProps = {

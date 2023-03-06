@@ -1,25 +1,35 @@
 import request from 'supertest'
 import app from '../src/app/app'
-import { scaleToPost } from '../src/app/utils/helpers/scales'
+import {
+  scaleOne,
+  scaleTwo,
+  scaleGetAllResponse,
+  scalePostResponse,
+  scaleToPost,
+} from '../src/app/utils/testing/scalesData'
 
-const routePrefix = '/api/v1'
-const mongooseProps = {
-  _id: expect.any(String),
-  __v: expect.any(Number),
-}
+const SCALE_ROUTE = '/api/v1/scales'
 
 describe('Scale tests', () => {
-  beforeEach(() => {
-    // add some scales
+  beforeEach(async () => {
+    await request(app).post(`/api/v1/modes`).send({
+      name: 'Dorian',
+    })
+    await request(app).post(SCALE_ROUTE).send(scaleOne)
+    await request(app).post(SCALE_ROUTE).send(scaleTwo)
   })
   afterEach(() => {
     // delete all scales
   })
+  
   it('should post a scale', async () => {
-    const res = await request(app)
-      .post(`${routePrefix}/scales`)
-      .send(scaleToPost)
+    const res = await request(app).post(SCALE_ROUTE).send(scaleToPost)
 
-    expect(res.body).toEqual({ ...scaleToPost, message: 'Success.', ...mongooseProps })
+    expect(res.body).toEqual(scalePostResponse)
+  })
+  it('should get all scales', async () => {
+    const res = await request(app).get(SCALE_ROUTE)
+
+    expect(res.body).toEqual(scaleGetAllResponse)
   })
 })

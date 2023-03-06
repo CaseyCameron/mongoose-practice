@@ -10,7 +10,7 @@ export const scalesController = {
     let modes: Types.ObjectId[] = []
 
     checkIfNameExists(Scale, scaleName, next)
-    modes = await checkForScaleErrors(modesArray)
+    modes = await checkForScaleErrors(modesArray, next)
 
     const scale = new Scale({
       name: scaleName,
@@ -24,9 +24,10 @@ export const scalesController = {
     })
   },
   getScales: async (req: Request, res: Response) => {
+    const scales = await Scale.find({}).populate({ path: 'modes' })
     res.status(200).json({
       message: 'Success',
+      scales,
     })
-    //.populate with name
   },
 }
