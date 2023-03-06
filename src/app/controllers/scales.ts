@@ -1,23 +1,41 @@
-import Scale from '../../db/models/Scale'
+import { ModeDocument, Mode, Scale } from '../../db/models'
 import { Request, Response, NextFunction } from 'express'
+import { Types } from 'mongoose'
 
-
-const scalesController = {
+export const scalesController = {
   addScale: async (req: Request, res: Response) => {
+    const { name: scaleName, modes: ModesArray } = req.body
+    let modes: Types.ObjectId[] = []
     try {
-      const scale = new Scale(req.body)
+      if (ModesArray.length) {
+        await Promise.all(ModesArray.map(async (modeName: ModeDocument) => {
+          const modeToAdd = await Mode.findOne({ name: modeName.name })
+          console.log('modeToAdd', modeToAdd)
+          if (modeToAdd) {
+            modes.push(modeToAdd._id)
+          } else {
+            return res.status(404).json({ message: `Mode: ${modeName} not found` })
+          }
+        }))
+      }
+      const scale = new Scale({
+        name: scaleName,
+        modes,
+      })
       await scale.save()
-      res.status(200).json({
-        message: 'Success.',
+      res.status(201).json({
+        message: 'Success',
         scale,
       })
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+      
+    }
   },
   getScales: async (req: Request, res: Response) => {
     res.status(200).json({
-      message: 'Success.',
+      message: 'Success',
     })
+    //.populate with name
   },
 }
-
-export default scalesController

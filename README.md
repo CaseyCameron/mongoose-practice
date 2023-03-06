@@ -21,25 +21,23 @@ many relationship as part of it’s schema.  Routes should be tested and unit te
 
 ### Plan
 Models:
-  - Scales
+  - Scales:
     - Ionian
     - Melodic Minor
     - Harmonic Minor
     - Harmonic Major
     - Major Pentatonic
-  - MusicGenres
+  - Modes:
+    - Name
+  - MusicGenres:
     - Name (jazz, rock, traditional East Asian, etc)
     - Origin (country)
-  - Composers
+  - Composers:
     - Name
     - DoB
     - scalesUsed
     - musicGenres
-  - Instruments
-    - Name
-    - Class
-    - musicGenres
-  - Compositions
+  - Compositions:
     - Name
     - musicGenre
     - Composer

@@ -6,14 +6,10 @@ const scaleSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  modes: [
-    {
-      name: {
-        type: String,
-        trim: true,
-      },
-    },
-  ],
+  modes: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Mode'
+  }]
 })
 
-export default mongoose.model('Scale', scaleSchema)
+export const Scale = mongoose.model('Scale', scaleSchema)
