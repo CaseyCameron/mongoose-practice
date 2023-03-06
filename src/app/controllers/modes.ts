@@ -1,5 +1,5 @@
 import { Mode } from '../../db/models/'
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response } from 'express'
 
 export const modesController = {
   addMode: async (req: Request, res: Response) => {

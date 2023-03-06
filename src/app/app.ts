@@ -5,6 +5,7 @@ import morgan from 'morgan'
 import heartbeat from './heartbeat'
 import mongoose from 'mongoose'
 import { modesRouter, scalesRouter } from './routes'
+import { handleErrors } from './utils/handlers/catchErrors'
 import dotenv from 'dotenv'
 
 dotenv.config()
@@ -20,6 +21,9 @@ app.use(express.json())
 app.get(routePrefix, heartbeat)
 app.use(routePrefix + '/modes', modesRouter)
 app.use(routePrefix + '/scales', scalesRouter)
+
+app.use(handleErrors)
+
 mongoose.set('strictQuery', true)
 
 export default app
