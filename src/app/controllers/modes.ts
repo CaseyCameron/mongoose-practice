@@ -44,6 +44,12 @@ export const modesController = {
 
     res.status(200).json({ message: 'Success', mode })
   },
+  deleteMode: async (req: Request, res: Response) => {
+    const _id = req.params._id
+    await Mode.deleteOne({ _id })
+
+    res.status(200).json({ message: 'Success' })
+  },
   deleteAllModes: async (req: Request, res: Response) => {
     await Mode.deleteMany({})
     res.status(200).json({ message: 'Success' })

@@ -49,6 +49,14 @@ describe('Mode tests', () => {
       mode: { ...mode, name: 'Lydian' },
     })
   })
+  it('should delete a mode', async () => {
+    const { body } = await request(app).get(MODE_ROUTE)
+    const _id = body.modes[0]._id
+    const res = await request(app).delete(MODE_ROUTE + `/${_id}`)
+
+    expect(res.status).toEqual(200)
+    expect(res.body).toEqual({ message: 'Success' })
+  })
   it('should delete all modes', async () => {
     const res = await request(app).delete(MODE_ROUTE)
 
