@@ -4,13 +4,10 @@ import {
   modeOne,
   modeTwo,
   modeToPost,
+  modePostResponse,
+  modeGetAllResponse,
 } from '../src/app/utils/testing/modesData'
 const MODE_ROUTE = '/api/v1/modes'
-
-const mongooseProps = {
-  _id: expect.any(String),
-  __v: expect.any(Number),
-}
 
 describe('Mode tests', () => {
   beforeEach(async () => {
@@ -23,12 +20,21 @@ describe('Mode tests', () => {
   it('should post a mode', async () => {
     const res = await request(app).post(MODE_ROUTE).send(modeToPost)
 
-    expect(res.body).toEqual({
-      mode: { ...modeToPost, ...mongooseProps },
-      message: 'Success',
-    })
+    expect(res.body).toEqual(modePostResponse)
   })
 
+  it('should get a mode by id', async () => {
+    const { body } = await request(app).get(MODE_ROUTE)
+    const mode = body.modes[0]
+    const res = await request(app).get(MODE_ROUTE + `/${mode._id}`)
+
+    expect(res.body).toEqual({ message: 'Success', mode })
+  })
+  it('should get all modes', async () => {
+    const res = await request(app).get(MODE_ROUTE)
+
+    expect(res.body).toEqual(modeGetAllResponse)
+  })
   it('should delete all modes', async () => {
     const res = await request(app).delete(MODE_ROUTE)
 

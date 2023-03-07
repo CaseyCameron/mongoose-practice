@@ -23,6 +23,14 @@ export const scalesController = {
       scale,
     })
   },
+  getScaleById: async (req: Request, res: Response) => {
+    const _id = req.params._id
+    const scale = await Scale.findOne({ _id })
+    res.status(200).json({
+      message: 'Success',
+      scale,
+    })
+  },
   getScales: async (req: Request, res: Response) => {
     const scales = await Scale.find({}).populate({ path: 'modes' })
     res.status(200).json({

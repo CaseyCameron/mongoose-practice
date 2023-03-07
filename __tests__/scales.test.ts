@@ -6,6 +6,7 @@ import {
   scaleGetAllResponse,
   scalePostResponse,
   scaleToPost,
+  scaleGetResponse,
 } from '../src/app/utils/testing/scalesData'
 
 const SCALE_ROUTE = '/api/v1/scales'
@@ -28,6 +29,14 @@ describe('Scale tests', () => {
     const res = await request(app).post(SCALE_ROUTE).send(scaleToPost)
 
     expect(res.body).toEqual(scalePostResponse)
+  })
+  it('should get a node by id', async () => {
+    const { body } = await request(app).get(SCALE_ROUTE)
+    const scale = body.scales[0]
+    console.log('scale', scale)
+    const res = await request(app).get(SCALE_ROUTE + `/${scale._id}`)
+
+    expect(res.body).toEqual(scaleGetResponse)
   })
   it('should get all scales', async () => {
     const res = await request(app).get(SCALE_ROUTE)

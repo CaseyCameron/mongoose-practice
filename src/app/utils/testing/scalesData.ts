@@ -35,6 +35,16 @@ export const scalePostResponse = {
   },
 }
 
+export const scaleGetResponse = {
+  message: 'Success',
+  scale: {
+    name: 'Melodic Minor',
+    modes: expect.arrayContaining([expect.any(String)]),
+    _id: expect.any(String),
+    __v: expect.any(Number),
+  },
+}
+
 export const scaleGetAllResponse = {
   message: 'Success',
   scales: [

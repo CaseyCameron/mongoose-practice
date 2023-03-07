@@ -5,6 +5,7 @@ import { catchErrors } from '../utils/handlers/catchErrors';
 const router = Router()
 
 router.post('/', catchErrors(scalesController.addScale))
+router.get('/:_id', catchErrors(scalesController.getScaleById))
 router.get('/', catchErrors(scalesController.getScales))
 router.delete('/', catchErrors(scalesController.deleteAllScales))
 

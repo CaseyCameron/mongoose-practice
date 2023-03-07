@@ -23,6 +23,21 @@ export const modesController = {
       })
     } catch (error) {}
   },
+  getModeById: async (req: Request, res: Response) => {
+    const _id = req.params._id
+    const mode = await Mode.findOne({ _id })
+    res.status(200).json({
+      message: 'Success',
+      mode
+    })
+  },
+  getModes: async (req: Request, res: Response) => {
+    const modes = await Mode.find({})
+    res.status(200).json({
+      message: 'Success',
+      modes,
+    })
+  },
   deleteAllModes: async (req: Request, res: Response) => {
     await Mode.deleteMany({})
     res.status(200).json({ message: 'Success' })
