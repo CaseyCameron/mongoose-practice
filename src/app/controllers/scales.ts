@@ -1,7 +1,7 @@
 import { Scale } from '../../db/models'
 import { Request, Response, NextFunction } from 'express'
 import { Types } from 'mongoose'
-import { checkIfNameExists } from '../utils/helpers/generics'
+import { checkForNameErrors } from '../utils/helpers/generics'
 import { checkForScaleErrors } from '../utils/helpers/scales'
 
 export const scalesController = {
@@ -9,8 +9,8 @@ export const scalesController = {
     const { name: scaleName, modes: modesArray } = req.body
     let modes: Types.ObjectId[] = []
 
-    checkIfNameExists(Scale, scaleName, next)
     modes = await checkForScaleErrors(modesArray, next)
+    checkForNameErrors(Scale, scaleName, next)
 
     const scale = new Scale({
       name: scaleName,
@@ -23,25 +23,61 @@ export const scalesController = {
       scale,
     })
   },
-  getScaleById: async (req: Request, res: Response) => {
+  getScaleById: async (req: Request, res: Response, next: NextFunction) => {
     const _id = req.params._id
     const scale = await Scale.findOne({ _id })
-    res.status(200).json({
-      message: 'Success',
-      scale,
-    })
+
+    if (scale) {
+      res.status(200).json({
+        message: 'Success',
+        scale,
+      })
+    } else {
+      next(new Error('Scale not found'))
+    }
   },
   getScales: async (req: Request, res: Response) => {
     const scales = await Scale.find({}).populate({ path: 'modes' })
-    res.status(200).json({
-      message: 'Success',
-      scales,
-    })
+
+    if (scales.length) {
+      res.status(200).json({
+        message: 'Success',
+        scales,
+      })
+    } else {
+      res.status(200).json({ message: 'There are no scales yet' })
+    }
   },
-  deleteAllScales: async (req: Request, res: Response) => {
-    await Scale.deleteMany({})
-    res.status(200).json({
-      message: 'Success',
-    })
+  editScale: async (req: Request, res: Response, next: NextFunction) => {
+    const _id = req.params._id
+    const scale = await Scale.findOneAndUpdate({ _id }, req.body, { new: true })
+
+    if (scale) {
+      res.status(200).json({ message: 'Success', scale })
+    } else {
+      next(new Error('Scale not found'))
+    }
+  },
+  deleteScale: async (req: Request, res: Response, next: NextFunction) => {
+    const _id = req.params._id
+    const { deletedCount } = await Scale.deleteOne({ _id })
+
+    if (deletedCount) {
+      res.status(200).json({ message: 'Success' })
+    } else {
+      next(new Error('Scale not found'))
+    }
+  },
+  deleteAllScales: async (req: Request, res: Response, next: NextFunction) => {
+    const scales = await Scale.find({})
+    const { deletedCount } = await Scale.deleteMany({})
+
+    if (scales.length == deletedCount) {
+      res.status(200).json({
+        message: 'Success',
+      })
+    } else {
+      next(new Error('Could not delete all scales'))
+    }
   },
 }

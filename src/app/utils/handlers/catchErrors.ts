@@ -17,5 +17,9 @@ export const handleErrors = (
     message: err.message,
     status: err.status,
   }
+
+  if (errorDetails.message === "Cannot read properties of undefined (reading 'length')") {
+    errorDetails.message = 'A required field was entered without a value'
+  }
   return res.status(err.status || 500).json(errorDetails)
 }

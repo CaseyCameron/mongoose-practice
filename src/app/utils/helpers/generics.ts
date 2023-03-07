@@ -1,7 +1,7 @@
 import { NextFunction } from 'express';
 import { Model } from 'mongoose'
 
-export const checkIfNameExists = async <T>(
+export const checkForNameErrors = async <T>(
   model: Model<T>,
   name: string,
   next: NextFunction

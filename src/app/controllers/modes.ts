@@ -73,10 +73,10 @@ export const modesController = {
     const modes = await Mode.find({})
     const { deletedCount } = await Mode.deleteMany({})
 
-    if (modes.length !== deletedCount) {
-      next(new Error('Could not delete all modes'))
-    } else {
+    if (modes.length === deletedCount) {
       res.status(200).json({ message: 'Success' })
+    } else {
+      next(new Error('Could not delete all modes'))
     }
   },
 }

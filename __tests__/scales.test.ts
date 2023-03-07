@@ -42,11 +42,80 @@ describe('Scale tests', () => {
 
     expect(res.body).toEqual(scaleGetAllResponse)
   })
+  it('should update a scale', async () => {
+    const { body } = await request(app).get(SCALE_ROUTE)
+    const scale = body.scales[0]
+    const res = await request(app)
+      .put(SCALE_ROUTE + `/${scale._id}`)
+      .send({
+        ...scale,
+        name: 'Harmonic Major',
+      })
 
+    expect(res.body).toEqual({
+      message: 'Success',
+      scale: { ...scale, name: 'Harmonic Major', modes: expect.any(Array) },
+    })
+  })
+  it('should delete a scale', async () => {
+    const { body } = await request(app).get(SCALE_ROUTE)
+    const _id = body.scales[0]._id
+    const res = await request(app).delete(SCALE_ROUTE + `/${_id}`)
+
+    expect(res.status).toEqual(200)
+    expect(res.body).toEqual({ message: 'Success' })
+  })
   it('should delete all scales', async () => {
     const res = await request(app).delete(SCALE_ROUTE)
 
     expect(res.status).toEqual(200)
     expect(res.body).toEqual({ message: 'Success' })
+  })
+})
+
+describe('Scales exception tests', () => {
+  it('should receive an error when posting without a name', async () => {
+    const res = await request(app).post(SCALE_ROUTE).send({ name: '' })
+
+    expect(res.body).toEqual({
+      message: 'A required field was entered without a value',
+    })
+  })
+  it('should receive an error when posting a duplicate name', async () => {
+    await request(app).post(MODE_ROUTE).send({ name: 'Dorian' })
+    await request(app).post(SCALE_ROUTE).send(scaleToPost)
+
+    const res = await request(app).post(SCALE_ROUTE).send(scaleToPost)
+
+    expect(res.body).toEqual({ message: 'Ionian already exists' })
+  })
+  it('should get appropriate message when scale not found by id', async () => {
+    const res = await request(app).get(
+      SCALE_ROUTE + '/6407881015de82cce302b882'
+    )
+
+    expect(res.body).toEqual({ message: 'Scale not found' })
+  })
+  it('should appropriate message when there are no scales', async () => {
+    await request(app).delete(SCALE_ROUTE)
+    const res = await request(app).get(SCALE_ROUTE)
+
+    expect(res.body).toEqual({ message: 'There are no scales yet' })
+  })
+  it('should receive appropriate error when updating a scale not found', async () => {
+    const res = await request(app)
+      .put(SCALE_ROUTE + '/6407881015de82cce302b882')
+      .send({ _id: '6407881015de82cce302b882', name: 'New Scale Name', __v: 0 })
+
+    expect(res.status).toEqual(500)
+    expect(res.body).toEqual({ message: 'Scale not found' })
+  })
+  it('should 500 when trying to delete a scale that does not exist', async () => {
+    const res = await request(app).delete(
+      SCALE_ROUTE + '/6407881015de82cce302b882'
+    )
+
+    expect(res.status).toEqual(500)
+    expect(res.body).toEqual({ message: 'Scale not found' })
   })
 })
