@@ -12,7 +12,6 @@ export const handleErrors = (
   res: Response,
   next: NextFunction
 ) => {
-  
   const errorDetails = {
     message: err.message,
     status: err.status,

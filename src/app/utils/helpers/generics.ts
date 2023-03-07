@@ -4,10 +4,10 @@ import { Types } from 'mongoose'
 
 export const checkIfNameExists = async <T>(
   model: Model<T>,
-  _id: Types.ObjectId | string,
   name: string,
   method: string,
-  next: NextFunction
+  next: NextFunction,
+  _id?: Types.ObjectId | string | undefined,
 ): Promise<boolean | void> => {  
   let exists = false
   const results = await model.find({ name })

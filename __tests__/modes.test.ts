@@ -7,6 +7,7 @@ import {
   modePostResponse,
   modeGetAllResponse,
 } from '../src/app/utils/testing/modesData'
+
 const MODE_ROUTE = '/api/v1/modes'
 
 describe('Mode tests', () => {
@@ -65,19 +66,24 @@ describe('Mode tests', () => {
   })
 })
 
-
 describe('Mode exception tests', () => {
+  afterEach(async () => {
+    await request(app).delete(MODE_ROUTE)
+  })
+
   it('should receive an error when posting without a name', async () => {
     const res = await request(app).post(MODE_ROUTE).send({ name: '' })
 
-    expect(res.body).toEqual({ message: 'No mode name entered' })
+    expect(res.body).toEqual({
+      message: 'Mode validation failed: name: Path `name` is required.',
+    })
   })
   it('should receive an error when posting a duplicate name', async () => {
     await request(app).post(MODE_ROUTE).send(modeToPost)
 
-    const res = await request(app).post(MODE_ROUTE).send({ name: 'Dorian' })
+    const res = await request(app).post(MODE_ROUTE).send(modeToPost)
 
-    expect(res.body).toEqual({ message: 'Mode already exists' })
+    expect(res.body).toEqual({ message: 'Dorian already exists' })
   })
   it('should get appropriate message when mode not found by id', async () => {
     const res = await request(app).get(MODE_ROUTE + '/6407881015de82cce302b882')

@@ -1,17 +1,13 @@
-import { Mode } from '../../db/models/'
+import { Mode } from '../../db/models'
 import { NextFunction, Request, Response } from 'express'
+import { checkIfNameExists } from '../utils/helpers/generics'
 
 export const modesController = {
-  addMode: async (req: Request, res: Response) => {
+  addMode: async (req: Request, res: Response, next: NextFunction) => {
     const { name } = req.body
-    if (!name) {
-      return res.status(500).json({ message: 'No mode name entered' })
-    } else {
-      const doesModeExist = await Mode.findOne({ name })
-      if (doesModeExist) {
-        return res.status(500).json({ message: 'Mode already exists' })
-      }
-    }
+
+    await checkIfNameExists(Mode, name, req.method, next)
+
     const mode = new Mode({
       name,
     })

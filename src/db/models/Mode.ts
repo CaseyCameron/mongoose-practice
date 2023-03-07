@@ -10,10 +10,6 @@ const modeSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  // scale: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'Scale',
-  // },
 })
 
 export const Mode = mongoose.model<ModeDocument>('Mode', modeSchema)

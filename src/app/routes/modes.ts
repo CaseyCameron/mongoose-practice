@@ -1,9 +1,12 @@
 import Router from 'express'
 import { modesController } from '../controllers/'
+import { body } from 'express-validator'
 import { catchErrors } from '../utils/handlers/catchErrors'
-const router = Router()
 
-router.post('/', catchErrors(modesController.addMode))
+const router = Router()
+const validationCriteria = [body('name').notEmpty()]
+
+router.post('/', validationCriteria, catchErrors(modesController.addMode))
 router.get('/:_id', catchErrors(modesController.getModeById))
 router.get('/', catchErrors(modesController.getModes))
 router.put('/:_id', catchErrors(modesController.editMode))

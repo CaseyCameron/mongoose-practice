@@ -49,12 +49,12 @@ describe('Scale tests', () => {
       .put(SCALE_ROUTE + `/${scale._id}`)
       .send({
         ...scale,
-        name: 'Harmonic Major',
+        name: 'Harmonic Minor',
       })
 
     expect(res.body).toEqual({
       message: 'Success',
-      scale: { ...scale, name: 'Harmonic Major', modes: expect.any(Array) },
+      scale: { ...scale, name: 'Harmonic Minor', modes: expect.any(Array) },
     })
   })
   it('should delete a scale', async () => {

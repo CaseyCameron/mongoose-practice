@@ -1,7 +1,7 @@
 import { Scale } from '../../db/models'
 import { Request, Response, NextFunction } from 'express'
 import { Types } from 'mongoose'
-import { checkForNameErrors } from '../utils/helpers/generics'
+import { checkIfNameExists } from '../utils/helpers/generics'
 import { checkForScaleErrors } from '../utils/helpers/scales'
 
 export const scalesController = {
@@ -10,7 +10,7 @@ export const scalesController = {
     let modes: Types.ObjectId[] = []
 
     modes = await checkForScaleErrors(modesArray, next)
-    checkForNameErrors(Scale, scaleName, next)
+    await checkIfNameExists(Scale, scaleName, req.method, next)
 
     const scale = new Scale({
       name: scaleName,
@@ -50,8 +50,11 @@ export const scalesController = {
   },
   editScale: async (req: Request, res: Response, next: NextFunction) => {
     const _id = req.params._id
+    const scaleName = req.body.name
+    
+    await checkIfNameExists(Scale, scaleName, req.method, next, _id)
     const scale = await Scale.findOneAndUpdate({ _id }, req.body, { new: true })
-
+    
     if (scale) {
       res.status(200).json({ message: 'Success', scale })
     } else {
