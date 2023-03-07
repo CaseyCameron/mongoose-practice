@@ -6,5 +6,6 @@ const router = Router()
 
 router.post('/', catchErrors(scalesController.addScale))
 router.get('/', catchErrors(scalesController.getScales))
+router.delete('/', catchErrors(scalesController.deleteAllScales))
 
 export const scalesRouter = router

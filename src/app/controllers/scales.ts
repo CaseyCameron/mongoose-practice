@@ -30,4 +30,10 @@ export const scalesController = {
       scales,
     })
   },
+  deleteAllScales: async (req: Request, res: Response) => {
+    await Scale.deleteMany({})
+    res.status(200).json({
+      message: 'Success',
+    })
+  },
 }

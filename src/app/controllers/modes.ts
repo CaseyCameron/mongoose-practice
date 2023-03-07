@@ -23,4 +23,8 @@ export const modesController = {
       })
     } catch (error) {}
   },
+  deleteAllModes: async (req: Request, res: Response) => {
+    await Mode.deleteMany({})
+    res.status(200).json({ message: 'Success' })
+  },
 }

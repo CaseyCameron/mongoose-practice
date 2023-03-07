@@ -9,6 +9,7 @@ import {
 } from '../src/app/utils/testing/scalesData'
 
 const SCALE_ROUTE = '/api/v1/scales'
+const MODE_ROUTE = '/api/v1/modes'
 
 describe('Scale tests', () => {
   beforeEach(async () => {
@@ -18,10 +19,11 @@ describe('Scale tests', () => {
     await request(app).post(SCALE_ROUTE).send(scaleOne)
     await request(app).post(SCALE_ROUTE).send(scaleTwo)
   })
-  afterEach(() => {
-    // delete all scales
+  afterEach(async () => {
+    await request(app).delete(SCALE_ROUTE)
+    await request(app).delete(MODE_ROUTE)
   })
-  
+
   it('should post a scale', async () => {
     const res = await request(app).post(SCALE_ROUTE).send(scaleToPost)
 
@@ -31,5 +33,12 @@ describe('Scale tests', () => {
     const res = await request(app).get(SCALE_ROUTE)
 
     expect(res.body).toEqual(scaleGetAllResponse)
+  })
+
+  it('should delete all scales', async () => {
+    const res = await request(app).delete(SCALE_ROUTE)
+
+    expect(res.status).toEqual(200)
+    expect(res.body).toEqual({ message: 'Success' })
   })
 })
