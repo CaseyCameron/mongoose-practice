@@ -64,3 +64,46 @@ describe('Mode tests', () => {
     expect(res.body).toEqual({ message: 'Success' })
   })
 })
+
+
+describe('Mode exception tests', () => {
+  it('should receive an error when posting without a name', async () => {
+    const res = await request(app).post(MODE_ROUTE).send({ name: '' })
+
+    expect(res.body).toEqual({ message: 'No mode name entered' })
+  })
+  it('should receive an error when posting a duplicate name', async () => {
+    await request(app).post(MODE_ROUTE).send(modeToPost)
+
+    const res = await request(app).post(MODE_ROUTE).send({ name: 'Dorian' })
+
+    expect(res.body).toEqual({ message: 'Mode already exists' })
+  })
+  it('should get appropriate message when mode not found by id', async () => {
+    const res = await request(app).get(MODE_ROUTE + '/6407881015de82cce302b882')
+
+    expect(res.body).toEqual({ message: 'Mode not found' })
+  })
+  it('should appropriate message when there are no modes', async () => {
+    await request(app).delete(MODE_ROUTE)
+    const res = await request(app).get(MODE_ROUTE)
+
+    expect(res.body).toEqual({ message: 'There are no modes yet' })
+  })
+  it('should receive appropriate error when updating a mode not found', async () => {
+    const res = await request(app)
+      .put(MODE_ROUTE + '/6407881015de82cce302b882')
+      .send({ _id: '6407881015de82cce302b882', name: 'New Mode Name', __v: 0 })
+
+    expect(res.status).toEqual(500)
+    expect(res.body).toEqual({ message: 'Mode not found' })
+  })
+  it('should 500 when trying to delete a mode that does not exist', async () => {
+    const res = await request(app).delete(
+      MODE_ROUTE + '/6407881015de82cce302b882'
+    )
+
+    expect(res.status).toEqual(500)
+    expect(res.body).toEqual({ message: 'Mode not found' })
+  })
+})
