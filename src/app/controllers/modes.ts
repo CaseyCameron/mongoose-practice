@@ -28,7 +28,7 @@ export const modesController = {
     const mode = await Mode.findOne({ _id })
     res.status(200).json({
       message: 'Success',
-      mode
+      mode,
     })
   },
   getModes: async (req: Request, res: Response) => {
@@ -37,6 +37,12 @@ export const modesController = {
       message: 'Success',
       modes,
     })
+  },
+  editMode: async (req: Request, res: Response) => {
+    const _id = req.params._id
+    const mode = await Mode.findOneAndUpdate({ _id }, req.body, { new: true })
+
+    res.status(200).json({ message: 'Success', mode })
   },
   deleteAllModes: async (req: Request, res: Response) => {
     await Mode.deleteMany({})

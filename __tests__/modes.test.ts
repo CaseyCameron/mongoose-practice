@@ -22,7 +22,6 @@ describe('Mode tests', () => {
 
     expect(res.body).toEqual(modePostResponse)
   })
-
   it('should get a mode by id', async () => {
     const { body } = await request(app).get(MODE_ROUTE)
     const mode = body.modes[0]
@@ -34,6 +33,21 @@ describe('Mode tests', () => {
     const res = await request(app).get(MODE_ROUTE)
 
     expect(res.body).toEqual(modeGetAllResponse)
+  })
+  it('should update a mode', async () => {
+    const { body } = await request(app).get(MODE_ROUTE)
+    const mode = body.modes[0]
+    const res = await request(app)
+      .put(MODE_ROUTE + `/${mode._id}`)
+      .send({
+        ...mode,
+        name: 'Lydian',
+      })
+
+    expect(res.body).toEqual({
+      message: 'Success',
+      mode: { ...mode, name: 'Lydian' },
+    })
   })
   it('should delete all modes', async () => {
     const res = await request(app).delete(MODE_ROUTE)

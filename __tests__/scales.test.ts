@@ -33,7 +33,6 @@ describe('Scale tests', () => {
   it('should get a node by id', async () => {
     const { body } = await request(app).get(SCALE_ROUTE)
     const scale = body.scales[0]
-    console.log('scale', scale)
     const res = await request(app).get(SCALE_ROUTE + `/${scale._id}`)
 
     expect(res.body).toEqual(scaleGetResponse)

@@ -27,6 +27,7 @@ Models:
     - Harmonic Minor
     - Harmonic Major
     - Major Pentatonic
+    - Modes (relation)
   - Modes:
     - Name
   - MusicGenres:
@@ -35,13 +36,13 @@ Models:
   - Composers:
     - Name
     - DoB
-    - scalesUsed
-    - musicGenres
+    - scalesUsed (relation)
+    - musicGenres (relation)
   - Compositions:
     - Name
-    - musicGenre
-    - Composer
-    - Scales
+    - musicGenre (relation)
+    - Composer (relation)
+    - Scales (relation)
 
 Example: 
 ```
