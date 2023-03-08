@@ -1,6 +1,6 @@
 import { Mode } from '../../db/models'
 import { NextFunction, Request, Response } from 'express'
-import { checkIfNameExists } from '../utils/helpers/generics'
+import { checkIfNameExists, deleteCollection } from '../utils/helpers/generics'
 
 export const modesController = {
   addMode: async (req: Request, res: Response, next: NextFunction) => {
@@ -69,10 +69,6 @@ export const modesController = {
     const modes = await Mode.find({})
     const { deletedCount } = await Mode.deleteMany({})
 
-    if (modes.length === deletedCount) {
-      res.status(200).json({ message: 'Success' })
-    } else {
-      next(new Error('Could not delete all modes'))
-    }
+    deleteCollection(modes, deletedCount, res, next)
   },
 }

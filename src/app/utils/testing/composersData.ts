@@ -4,10 +4,10 @@ const mongooseProps = {
 }
 
 export const composerToPost = {
-  name: 'Igor Stravinsky',
-  dob: new Date('June 17, 1882'),
-  scalesUsed: [{ name: 'Melodic Minor' }, { name: 'Ionian' }],
-  musicGenres: [{ name: 'Classical', origin: 'Europe' }],
+  name: 'John Adams',
+  dob: new Date('February 15, 1947'),
+  scalesUsed: [],
+  musicGenres: [],
 }
 
 export const composerOne = {

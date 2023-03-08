@@ -1,7 +1,7 @@
 import { Scale } from '../../db/models'
 import { Request, Response, NextFunction } from 'express'
 import { Types } from 'mongoose'
-import { checkIfNameExists } from '../utils/helpers/generics'
+import { checkIfNameExists, deleteCollection } from '../utils/helpers/generics'
 import { checkForScaleErrors } from '../utils/helpers/scales'
 
 export const scalesController = {
@@ -75,12 +75,6 @@ export const scalesController = {
     const scales = await Scale.find({})
     const { deletedCount } = await Scale.deleteMany({})
 
-    if (scales.length == deletedCount) {
-      res.status(200).json({
-        message: 'Success',
-      })
-    } else {
-      next(new Error('Could not delete all scales'))
-    }
+    deleteCollection(scales, deletedCount, res, next)
   },
 }

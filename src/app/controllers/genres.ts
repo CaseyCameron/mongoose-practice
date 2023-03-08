@@ -1,17 +1,13 @@
 import { Genre } from '../../db/models'
 import { NextFunction, Request, Response } from 'express'
-import { validationResult } from 'express-validator'
-import { checkIfNameExists } from '../utils/helpers/generics'
+import { checkIfNameExists, deleteCollection } from '../utils/helpers/generics'
+import { handleValidation } from '../utils/handlers/catchErrors';
 
 export const genresController = {
   addGenre: async (req: Request, res: Response, next: NextFunction) => {
     const { name, origin } = req.body
 
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      next(new Error(`${errors.array()[0].msg}`))
-    }
-    
+    handleValidation(req, next)
     await checkIfNameExists(Genre, name, req.method, next)
 
     const genre = new Genre({
@@ -56,12 +52,9 @@ export const genresController = {
     const genreName = req.body.name
 
     await checkIfNameExists(Genre, genreName, req.method, next, _id)
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      next(new Error(`${errors.array()[0].msg}`))
-    }
-    const genre = await Genre.findOneAndUpdate({ _id }, req.body, { new: true })
+    handleValidation(req, next)
 
+    const genre = await Genre.findOneAndUpdate({ _id }, req.body, { new: true })
     if (genre) {
       res.status(200).json({ message: 'Success', genre})
     } else {
@@ -82,10 +75,6 @@ export const genresController = {
     const genres = await Genre.find({})
     const { deletedCount } = await Genre.deleteMany({})
 
-    if (genres.length === deletedCount) {
-      res.status(200).json({ message: 'Success' })
-    } else {
-      next(new Error('Could not delete all genres'))
-    }
+    deleteCollection(genres, deletedCount, res, next)
   },
 }

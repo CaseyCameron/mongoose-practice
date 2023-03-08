@@ -62,7 +62,7 @@ describe('genre tests', () => {
   it('should delete all genres', async () => {
     const res = await request(app).delete(GENRE_ROUTE)
 
-    expect(res.status).toEqual(200)
+    expect(res.status).toBe(200)
     expect(res.body).toEqual({ message: 'Success' })
   })
 })
