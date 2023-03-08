@@ -14,7 +14,7 @@ const MODE_ROUTE = '/api/v1/modes'
 
 describe('Scale tests', () => {
   beforeEach(async () => {
-    await request(app).post(`/api/v1/modes`).send({
+    await request(app).post(MODE_ROUTE).send({
       name: 'Dorian',
     })
     await request(app).post(SCALE_ROUTE).send(scaleOne)

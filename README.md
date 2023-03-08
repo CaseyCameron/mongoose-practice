@@ -35,7 +35,7 @@ Models:
     - Origin (country)
   - Composers:
     - Name
-    - DoB
+    - dob
     - scalesUsed (relation)
     - musicGenres (relation)
   - Compositions:

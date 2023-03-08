@@ -1,5 +1,3 @@
-import mongoose from 'mongoose';
-
 const mongooseProps = {
   _id: expect.any(String),
   __v: expect.any(Number),
