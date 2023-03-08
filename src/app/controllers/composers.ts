@@ -4,7 +4,7 @@ import {
   checkIfNameExists,
   deleteCollection,
   retrieveCollection,
-  retrieveDocument,
+  handleDocumentResponse,
 } from '../utils/helpers/generics'
 import { handleValidation } from '../utils/handlers/catchErrors';
 
@@ -32,12 +32,24 @@ export const composersController = {
     const _id = req.params._id
     const composer = await Composer.findById({ _id })
 
-    await retrieveDocument(composer, Composer, res, next)
+    await handleDocumentResponse(composer, Composer, res, next)
   },
   getComposers: async (req: Request, res: Response) => {
     const composers = await Composer.find({})
 
     retrieveCollection(composers, Composer, res)
+  },
+  editComposers: async (req: Request, res: Response, next: NextFunction) => {
+    const _id = req.params._id
+    const composerName = req.body.name
+
+    await checkIfNameExists(Composer, composerName, req.method, next, _id)
+    handleValidation(req, next)
+
+    const composer = await Composer.findOneAndUpdate({ _id }, req.body, {
+      new: true,
+    })
+    await handleDocumentResponse(composer, Composer, res, next)
   },
   deleteAllComposers: async (
     req: Request,

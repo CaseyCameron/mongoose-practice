@@ -83,7 +83,14 @@ describe.only('Composer tests', () => {
 
     expect(res.body).toEqual({
       message: 'Success',
-      composer: { ...composer, name: 'Tommy Two Socks' },
+      composer: {
+        ...composer,
+        name: 'Tommy Two Socks',
+        dob: expect.any(String),
+        musicGenres: expect.any(Array),
+        scalesUsed: expect.any(Array),
+        ...mongooseProps,
+      },
     })
   })
   it('should delete all composers', async () => {

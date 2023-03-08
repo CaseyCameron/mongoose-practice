@@ -4,7 +4,7 @@ import { body } from 'express-validator'
 import { catchErrors } from '../utils/handlers/catchErrors'
 
 const router = Router()
-const validationCriteria = [body('name, dob', 'Field(s) must not be empty').notEmpty()]
+const validationCriteria = [body('name').notEmpty(), body('dob').notEmpty()]
 
 router.post(
   '/',
@@ -13,6 +13,6 @@ router.post(
 )
 router.get('/:_id', catchErrors(composersController.getComposer))
 router.get('/', catchErrors(composersController.getComposers))
-router.get('/:_id', validationCriteria, catchErrors(composersController.editComposers))
+router.put('/:_id', validationCriteria, catchErrors(composersController.editComposers))
 router.delete('/', catchErrors(composersController.deleteAllComposers))
 export const composersRouter = router
