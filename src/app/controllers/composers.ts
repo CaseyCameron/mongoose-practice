@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express'
 import {
   checkIfNameExists,
   deleteCollection,
-  retrieveCollection,
+  handleCollectionResponse,
   handleDocumentResponse,
 } from '../utils/helpers/generics'
 import { handleValidation } from '../utils/handlers/catchErrors';
@@ -37,7 +37,7 @@ export const composersController = {
   getComposers: async (req: Request, res: Response) => {
     const composers = await Composer.find({})
 
-    retrieveCollection(composers, Composer, res)
+    await handleCollectionResponse(composers, Composer, res)
   },
   editComposers: async (req: Request, res: Response, next: NextFunction) => {
     const _id = req.params._id
@@ -59,6 +59,6 @@ export const composersController = {
     const composers = await Composer.find({})
     const { deletedCount } = await Composer.deleteMany({})
 
-    deleteCollection(composers, deletedCount, res, next)
+    await deleteCollection(composers, deletedCount, res, next)
   },
 }

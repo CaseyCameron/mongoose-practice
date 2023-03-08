@@ -55,7 +55,7 @@ export const handleDocumentResponse = async <T extends Document, K>(
   }
 }
 
-export const retrieveCollection = async <T extends Document, K>(
+export const handleCollectionResponse = async <T extends Document, K>(
   documents: T[],
   model: Model<K>,
   res: Response,
@@ -72,7 +72,3 @@ export const retrieveCollection = async <T extends Document, K>(
     })
   }
 }
-
-export const editDocument = async <T extends Document, K>(
-  document: T | null, 
-) => {}

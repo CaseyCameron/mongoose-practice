@@ -1,6 +1,6 @@
 import { Genre } from '../../db/models'
 import { NextFunction, Request, Response } from 'express'
-import { checkIfNameExists, deleteCollection } from '../utils/helpers/generics'
+import { checkIfNameExists, deleteCollection, handleCollectionResponse, handleDocumentResponse } from '../utils/helpers/generics'
 import { handleValidation } from '../utils/handlers/catchErrors';
 
 export const genresController = {
@@ -24,28 +24,12 @@ export const genresController = {
     const _id = req.params._id
     const genre = await Genre.findOne({ _id })
 
-    if (genre) {
-      res.status(200).json({
-        message: 'Success',
-        genre,
-      })
-    } else {
-      next(new Error('Genre not found'))
-    }
+    await handleDocumentResponse(genre, Genre, res, next)
   },
   getGenres: async (req: Request, res: Response) => {
     const genres = await Genre.find({})
 
-    if (genres.length) {
-      res.status(200).json({
-        message: 'Success',
-        genres,
-      })
-    } else {
-      res.status(200).json({
-        message: 'There are no genres yet',
-      })
-    }
+    await handleCollectionResponse(genres, Genre, res)
   },
   editGenre: async (req: Request, res: Response, next: NextFunction) => {
     const _id = req.params._id
@@ -55,11 +39,7 @@ export const genresController = {
     handleValidation(req, next)
 
     const genre = await Genre.findOneAndUpdate({ _id }, req.body, { new: true })
-    if (genre) {
-      res.status(200).json({ message: 'Success', genre})
-    } else {
-      next (new Error('Genre not found'))
-    }
+    await handleDocumentResponse(genre, Genre, res, next)
   },
   deleteGenre: async (req: Request, res: Response, next: NextFunction) => {
     const _id = req.params._id
@@ -75,6 +55,6 @@ export const genresController = {
     const genres = await Genre.find({})
     const { deletedCount } = await Genre.deleteMany({})
 
-    deleteCollection(genres, deletedCount, res, next)
+    await deleteCollection(genres, deletedCount, res, next)
   },
 }

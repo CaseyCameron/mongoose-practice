@@ -1,6 +1,6 @@
 import { Mode } from '../../db/models'
 import { NextFunction, Request, Response } from 'express'
-import { checkIfNameExists, deleteCollection } from '../utils/helpers/generics'
+import { checkIfNameExists, deleteCollection, handleCollectionResponse, handleDocumentResponse } from '../utils/helpers/generics'
 
 export const modesController = {
   addMode: async (req: Request, res: Response, next: NextFunction) => {
@@ -22,38 +22,18 @@ export const modesController = {
     const _id = req.params._id
     const mode = await Mode.findOne({ _id })
 
-    if (mode) {
-      res.status(200).json({
-        message: 'Success',
-        mode,
-      })
-    } else {
-      next(new Error('Mode not found'))
-    }
+    await handleDocumentResponse(mode, Mode, res, next)
   },
   getModes: async (req: Request, res: Response) => {
     const modes = await Mode.find({})
 
-    if (modes.length) {
-      res.status(200).json({
-        message: 'Success',
-        modes,
-      })
-    } else {
-      res.status(200).json({
-        message: 'There are no modes yet',
-      })
-    }
+    await handleCollectionResponse(modes, Mode, res)
   },
   editMode: async (req: Request, res: Response, next: NextFunction) => {
     const _id = req.params._id
     const mode = await Mode.findOneAndUpdate({ _id }, req.body, { new: true })
 
-    if (mode) {
-      res.status(200).json({ message: 'Success', mode })
-    } else {
-      next(new Error('Mode not found'))
-    }
+  await handleDocumentResponse(mode, Mode, res, next)
   },
   deleteMode: async (req: Request, res: Response, next: NextFunction) => {
     const _id = req.params._id
@@ -69,6 +49,6 @@ export const modesController = {
     const modes = await Mode.find({})
     const { deletedCount } = await Mode.deleteMany({})
 
-    deleteCollection(modes, deletedCount, res, next)
+    await deleteCollection(modes, deletedCount, res, next)
   },
 }

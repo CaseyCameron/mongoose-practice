@@ -1,7 +1,7 @@
 import { Scale } from '../../db/models'
 import { Request, Response, NextFunction } from 'express'
 import { Types } from 'mongoose'
-import { checkIfNameExists, deleteCollection } from '../utils/helpers/generics'
+import { checkIfNameExists, deleteCollection, handleCollectionResponse, handleDocumentResponse } from '../utils/helpers/generics'
 import { checkForScaleErrors } from '../utils/helpers/scales'
 
 export const scalesController = {
@@ -27,26 +27,12 @@ export const scalesController = {
     const _id = req.params._id
     const scale = await Scale.findOne({ _id })
 
-    if (scale) {
-      res.status(200).json({
-        message: 'Success',
-        scale,
-      })
-    } else {
-      next(new Error('Scale not found'))
-    }
+    await handleDocumentResponse(scale, Scale, res, next)
   },
   getScales: async (req: Request, res: Response) => {
     const scales = await Scale.find({}).populate({ path: 'modes' })
 
-    if (scales.length) {
-      res.status(200).json({
-        message: 'Success',
-        scales,
-      })
-    } else {
-      res.status(200).json({ message: 'There are no scales yet' })
-    }
+    await handleCollectionResponse(scales, Scale, res)
   },
   editScale: async (req: Request, res: Response, next: NextFunction) => {
     const _id = req.params._id
@@ -55,11 +41,7 @@ export const scalesController = {
     await checkIfNameExists(Scale, scaleName, req.method, next, _id)
     const scale = await Scale.findOneAndUpdate({ _id }, req.body, { new: true })
     
-    if (scale) {
-      res.status(200).json({ message: 'Success', scale })
-    } else {
-      next(new Error('Scale not found'))
-    }
+    await handleDocumentResponse(scale, Scale, res, next)
   },
   deleteScale: async (req: Request, res: Response, next: NextFunction) => {
     const _id = req.params._id
@@ -75,6 +57,6 @@ export const scalesController = {
     const scales = await Scale.find({})
     const { deletedCount } = await Scale.deleteMany({})
 
-    deleteCollection(scales, deletedCount, res, next)
+    await deleteCollection(scales, deletedCount, res, next)
   },
 }
