@@ -16,4 +16,5 @@ router.get('/', catchErrors(composersController.getComposers))
 router.put('/:_id', validationCriteria, catchErrors(composersController.editComposers))
 router.delete('/:_id', catchErrors(composersController.deleteAllComposers))
 router.delete('/', catchErrors(composersController.deleteAllComposers))
+
 export const composersRouter = router

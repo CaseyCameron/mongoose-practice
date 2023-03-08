@@ -1,0 +1,5 @@
+export const COMPOSER_ROUTE = '/api/v1/composers'
+export const COMPOSITION_ROUTE = '/api/v1/compositions'
+export const GENRE_ROUTE = '/api/v1/genres'
+export const MODE_ROUTE = '/api/v1/modes'
+export const SCALE_ROUTE = '/api/v1/scales'

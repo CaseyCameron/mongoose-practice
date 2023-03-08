@@ -7,8 +7,7 @@ import {
   modePostResponse,
   modeGetAllResponse,
 } from '../src/app/utils/testing/modesData'
-
-const MODE_ROUTE = '/api/v1/modes'
+import { MODE_ROUTE } from '../src/app/utils/helpers'
 
 describe('Mode tests', () => {
   beforeEach(async () => {

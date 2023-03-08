@@ -8,9 +8,7 @@ import {
   scaleToPost,
   scaleGetResponse,
 } from '../src/app/utils/testing/scalesData'
-
-const SCALE_ROUTE = '/api/v1/scales'
-const MODE_ROUTE = '/api/v1/modes'
+import { SCALE_ROUTE, MODE_ROUTE } from '../src/app/utils/helpers'
 
 describe('Scale tests', () => {
   beforeEach(async () => {

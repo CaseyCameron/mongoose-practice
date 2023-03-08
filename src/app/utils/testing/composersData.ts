@@ -1,9 +1,6 @@
 import request from 'supertest'
 import app from '../../app'
-
-const GENRE_ROUTE = '/api/v1/genres'
-const MODE_ROUTE = '/api/v1/modes'
-const SCALE_ROUTE = '/api/v1/scales'
+import { GENRE_ROUTE, MODE_ROUTE, SCALE_ROUTE} from '../helpers/index'
 
 export const seedDataForComposer = async () => {
   const modeResponse = await request(app)

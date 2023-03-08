@@ -7,6 +7,7 @@ import mongoose from 'mongoose'
 import { composersRouter, genresRouter, modesRouter, scalesRouter } from './routes'
 import { handleErrors } from './utils/handlers/catchErrors'
 import dotenv from 'dotenv'
+import { compositionsRouter } from './routes/compositions';
 
 dotenv.config()
 
@@ -20,6 +21,7 @@ app.use(express.json())
 
 app.get(routePrefix, heartbeat)
 app.use(routePrefix + '/composers', composersRouter)
+app.use(routePrefix + '/compositions', compositionsRouter)
 app.use(routePrefix + '/genres', genresRouter)
 app.use(routePrefix + '/modes', modesRouter)
 app.use(routePrefix + '/scales', scalesRouter)

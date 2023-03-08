@@ -3,8 +3,6 @@ import app from '../src/app/app'
 import {
   clearCollections,
   seedCollections,
-} from '../src/app/utils/testing/collections'
-import {
   composerGetAllResponse,
   composerPostResponse,
   composerOne,
@@ -12,11 +10,8 @@ import {
   mongooseProps,
   seedComposer,
   composerToPost,
-} from '../src/app/utils/testing/composersData'
-
-const COMPOSER_ROUTE = '/api/v1/composers'
-const GENRE_ROUTE = '/api/v1/genres'
-const SCALE_ROUTE = '/api/v1/scales'
+} from '../src/app/utils/testing'
+import { COMPOSER_ROUTE, GENRE_ROUTE, SCALE_ROUTE} from '../src/app/utils/helpers/globalVars'
 
 const postAComposer = async () => {
   const { body: scales } = await request(app).get(SCALE_ROUTE)

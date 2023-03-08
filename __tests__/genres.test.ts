@@ -7,8 +7,7 @@ import {
   genrePostResponse,
   genreGetAllResponse,
 } from '../src/app/utils/testing/genresData'
-
-const GENRE_ROUTE = '/api/v1/genres'
+import { GENRE_ROUTE } from '../src/app/utils/helpers'
 
 describe('genre tests', () => {
   beforeEach(async () => {

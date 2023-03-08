@@ -2,10 +2,7 @@ import mongoose from 'mongoose'
 import request from 'supertest'
 import app from '../../app'
 import { genreOne, genreTwo, modeOne, scaleOne, scaleTwo } from '.'
-
-const GENRE_ROUTE = '/api/v1/genres'
-const MODE_ROUTE = '/api/v1/modes'
-const SCALE_ROUTE = '/api/v1/scales'
+import { COMPOSER_ROUTE, GENRE_ROUTE, MODE_ROUTE, SCALE_ROUTE} from '../helpers/index'
 
 export const seedCollections = async () => {
   await request(app).post(MODE_ROUTE).send(modeOne)
@@ -16,6 +13,14 @@ export const seedCollections = async () => {
   await request(app)
     .post(GENRE_ROUTE)
     .send({ name: 'Classical', origin: 'Europe' })
+  await request(app)
+      .post(COMPOSER_ROUTE)
+      .send({
+        name: 'Johnny Appleseed',
+        dob: new Date('June 17, 1882'),
+        scalesUsed: [],
+        musicGenres: [],
+      })
 }
 
 export const clearCollections = async () => {
