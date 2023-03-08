@@ -1,6 +1,12 @@
 import { Genre } from '../../db/models'
 import { NextFunction, Request, Response } from 'express'
-import { checkIfNameExists, deleteCollection, handleCollectionResponse, handleDocumentResponse } from '../utils/helpers/generics'
+import {
+  checkIfNameExists,
+  deleteCollectionResponse,
+  deleteDocumentResponse,
+  handleCollectionResponse,
+  handleDocumentResponse,
+} from '../utils/helpers/generics'
 import { handleValidation } from '../utils/handlers/catchErrors';
 
 export const genresController = {
@@ -45,16 +51,12 @@ export const genresController = {
     const _id = req.params._id
     const { deletedCount } = await Genre.deleteOne({ _id })
 
-    if (deletedCount) {
-      res.status(200).json({ message: 'Success' })
-    } else {
-      next(new Error('Genre not found'))
-    }
+    await deleteDocumentResponse(deletedCount, Genre, res, next)
   },
   deleteAllGenres: async (req: Request, res: Response, next: NextFunction) => {
     const genres = await Genre.find({})
     const { deletedCount } = await Genre.deleteMany({})
 
-    await deleteCollection(genres, deletedCount, res, next)
+    await deleteCollectionResponse(genres, deletedCount, res, next)
   },
 }

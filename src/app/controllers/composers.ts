@@ -2,11 +2,12 @@ import { Composer } from '../../db/models/Composer'
 import { NextFunction, Request, Response } from 'express'
 import {
   checkIfNameExists,
-  deleteCollection,
+  deleteCollectionResponse,
   handleCollectionResponse,
+  deleteDocumentResponse,
   handleDocumentResponse,
 } from '../utils/helpers/generics'
-import { handleValidation } from '../utils/handlers/catchErrors';
+import { handleValidation } from '../utils/handlers/catchErrors'
 
 export const composersController = {
   addComposer: async (req: Request, res: Response, next: NextFunction) => {
@@ -51,6 +52,11 @@ export const composersController = {
     })
     await handleDocumentResponse(composer, Composer, res, next)
   },
+  deleteComposer: async (req: Request, res: Response, next: NextFunction) => {
+    const _id = req.params._id
+    const { deletedCount } = await Composer.deleteOne({ _id })
+    await deleteDocumentResponse(deletedCount, Composer, res, next)
+  },
   deleteAllComposers: async (
     req: Request,
     res: Response,
@@ -59,6 +65,6 @@ export const composersController = {
     const composers = await Composer.find({})
     const { deletedCount } = await Composer.deleteMany({})
 
-    await deleteCollection(composers, deletedCount, res, next)
+    await deleteCollectionResponse(composers, deletedCount, res, next)
   },
 }

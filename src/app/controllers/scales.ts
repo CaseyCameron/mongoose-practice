@@ -1,7 +1,7 @@
 import { Scale } from '../../db/models'
 import { Request, Response, NextFunction } from 'express'
 import { Types } from 'mongoose'
-import { checkIfNameExists, deleteCollection, handleCollectionResponse, handleDocumentResponse } from '../utils/helpers/generics'
+import { checkIfNameExists, deleteCollectionResponse, deleteDocumentResponse, handleCollectionResponse, handleDocumentResponse } from '../utils/helpers/generics'
 import { checkForScaleErrors } from '../utils/helpers/scales'
 
 export const scalesController = {
@@ -47,16 +47,12 @@ export const scalesController = {
     const _id = req.params._id
     const { deletedCount } = await Scale.deleteOne({ _id })
 
-    if (deletedCount) {
-      res.status(200).json({ message: 'Success' })
-    } else {
-      next(new Error('Scale not found'))
-    }
+    await deleteDocumentResponse(deletedCount, Scale, res, next)
   },
   deleteAllScales: async (req: Request, res: Response, next: NextFunction) => {
     const scales = await Scale.find({})
     const { deletedCount } = await Scale.deleteMany({})
 
-    await deleteCollection(scales, deletedCount, res, next)
+    await deleteCollectionResponse(scales, deletedCount, res, next)
   },
 }

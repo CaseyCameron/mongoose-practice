@@ -25,7 +25,7 @@ export const checkIfNameExists = async <T>(
   }
 }
 
-export const deleteCollection = async <T extends Document>(
+export const deleteCollectionResponse = async <T extends Document>(
   documents: T[],
   deletedCount: number,
   res: Response,
@@ -50,6 +50,19 @@ export const handleDocumentResponse = async <T extends Document, K>(
       message: 'Success',
       [name]: document
     })
+  } else {
+    next(new Error(`${model.modelName} not found`))
+  }
+}
+
+export const deleteDocumentResponse = async <K>(
+  deletedCount: number | null,
+  model: Model<K>,
+  res: Response,
+  next: NextFunction
+) => {
+  if (deletedCount) {
+    res.status(200).json({ message: 'Success' })
   } else {
     next(new Error(`${model.modelName} not found`))
   }

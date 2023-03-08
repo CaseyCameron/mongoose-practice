@@ -67,7 +67,7 @@ describe('genre tests', () => {
   })
 })
 
-describe('genre exception tests', () => {
+describe('Genre exception tests', () => {
   afterEach(async () => {
     await request(app).delete(GENRE_ROUTE)
   })
