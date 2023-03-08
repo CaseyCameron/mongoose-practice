@@ -11,5 +11,6 @@ router.post(
   validationCriteria,
   catchErrors(compositionsController.addComposition)
 )
+router.delete('/', catchErrors(compositionsController.deleteAllCompositions))
 
 export const compositionsRouter = router

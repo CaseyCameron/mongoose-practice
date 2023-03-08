@@ -9,6 +9,20 @@ export const seedDataForComposition = async () => {
   console.log('composer.body', composer)
 }
 
+export const compositionOne = {
+  name: 'All The Things You Are',
+  composer: 'Oscar Hammerstein',
+  scalesUsed: [],
+  musicGenres: [],
+}
+
+export const compositionTwo = {
+  name: 'Rich Girl',
+  composer: 'Hall and Oates',
+  scalesUsed: [],
+  musicGenres: [],
+}
+
 export const compositionPostResponse = {
   message: 'Success',
   composition: {

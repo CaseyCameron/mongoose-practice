@@ -29,4 +29,13 @@ export const compositionsController = {
       composition,
     })
   },
-}
+  deleteAllCompositions: async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const compositions = await Composition.find({})
+    const { deletedCount } = await Composition.deleteMany({})
+
+    await deleteCollectionResponse(compositions, deletedCount, res, next)
+  },}
