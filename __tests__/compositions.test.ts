@@ -49,10 +49,15 @@ describe('Composition tests', () => {
 
     expect(res.body).toEqual(compositionPostResponse)
   })
-  it('deletes all compositions', async () => {
+  it('should get all compositions', async () => {
+    const res = await request(app).get(COMPOSITION_ROUTE)
+
+    expect(res.status).toBe(200)
+  })
+  it('should delete all compositions', async () => {
     const res = await request(app).delete(COMPOSITION_ROUTE)
 
-    expect(res.status).toBe(20)
+    expect(res.status).toBe(200)
     expect(res.body).toEqual({ message: 'Success' })
   })
 })
