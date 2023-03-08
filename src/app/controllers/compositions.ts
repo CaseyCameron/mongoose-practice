@@ -29,6 +29,12 @@ export const compositionsController = {
       composition,
     })
   },
+  getComposition: async (req: Request, res: Response, next: NextFunction) => {
+    const _id = req.params._id
+    const composition = await Composition.findById({ _id })
+
+    await handleDocumentResponse(composition, Composition, res, next)
+  },
   getCompositions: async (req: Request, res: Response) => {
     const compositions = await Composition.find({})
 

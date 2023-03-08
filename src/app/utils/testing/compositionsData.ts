@@ -1,12 +1,26 @@
 import request from 'supertest'
 import app from '../../app'
 import { seedComposer } from './composersData'
-import { COMPOSITION_ROUTE } from '../helpers/index'
+import { COMPOSER_ROUTE, COMPOSITION_ROUTE } from '../helpers/index'
 import { mongooseProps } from './composersData'
 
 export const seedDataForComposition = async () => {
   const composer = await seedComposer()
-  console.log('composer.body', composer)
+  return composer
+}
+
+export const seedComposition = async () => {
+  const compositionResponse = await seedDataForComposition()
+  const composer = await request(app).post(COMPOSER_ROUTE).send(compositionResponse)
+  const composerId = composer.body.composer._id
+  const { scalesUsed, musicGenres } = compositionResponse
+
+  return {
+    name: 'Really Cool Composition',
+    composer: composerId,
+    scalesUsed,
+    musicGenres
+  }
 }
 
 export const compositionOne = {

@@ -14,6 +14,8 @@ import {
   compositionOne,
   compositionPostResponse,
   compositionTwo,
+  mongooseProps,
+  seedComposition,
 } from '../src/app/utils/testing'
 
 const postComposition = async () => {
@@ -49,6 +51,24 @@ describe('Composition tests', () => {
 
     expect(res.body).toEqual(compositionPostResponse)
   })
+  it('should get a composition by id', async () => {
+    const composition = await seedComposition()
+    const { body } = await request(app).post(COMPOSITION_ROUTE).send(composition)
+    const res = await request(app).get(COMPOSITION_ROUTE + `/${body.composition._id}`)
+    
+    expect(res.status).toBe(200)
+    expect(res.body).toEqual({
+      message: 'Success',
+      composition: {
+        ...composition,
+        composer: expect.any(String),
+        musicGenres: expect.any(Array),
+        scalesUsed: expect.any(Array),
+        ...mongooseProps, 
+      }
+    })
+  })
+
   it('should get all compositions', async () => {
     const res = await request(app).get(COMPOSITION_ROUTE)
 

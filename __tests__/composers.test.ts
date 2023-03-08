@@ -51,6 +51,7 @@ describe('Composer tests', () => {
     const { body } = await request(app).post(COMPOSER_ROUTE).send(composer)
     const res = await request(app).get(COMPOSER_ROUTE + `/${body.composer._id}`)
 
+    expect(res.status).toBe(200)
     expect(res.body).toEqual({
       message: 'Success',
       composer: {
