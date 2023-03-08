@@ -2,6 +2,7 @@ import Router from 'express'
 import { genresController } from '../controllers'
 import { body } from 'express-validator'
 import { catchErrors } from '../utils/handlers/catchErrors'
+
 const router = Router()
 
 const validationCriteria = [body('name').notEmpty(), body('origin').notEmpty()]

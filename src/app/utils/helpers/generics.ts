@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import mongoose, { Document, Model, Types } from 'mongoose'
+import { Document, Model, Types } from 'mongoose'
 
 export const checkIfNameExists = async <T>(
   model: Model<T>,
@@ -35,5 +35,40 @@ export const deleteCollection = async <T extends Document>(
     res.status(200).json({ message: 'Success' })
   } else {
     next(new Error('Could not delete all items'))
+  }
+}
+
+export const retrieveDocument = async <T extends Document, K>(
+  document: T | null,
+  model: Model<K>,
+  res: Response,
+  next: NextFunction
+) => {
+  const name = `${model.modelName.toLowerCase()}`
+  if (document) {
+    res.status(200).json({
+      message: 'Success',
+      [name]: document
+    })
+  } else {
+    next(new Error(`${model.modelName} not found`))
+  }
+}
+
+export const retrieveCollection = async <T extends Document, K>(
+  documents: T[],
+  model: Model<K>,
+  res: Response,
+) => {
+  const name = `${model.modelName.toLowerCase()}s`
+  if (documents.length) {
+    res.status(200).json({
+      message: 'Success',
+      [name]: documents,
+    })
+  } else {
+    res.status(200).json({
+      message: `There are no ${name} yet`,
+    })
   }
 }
