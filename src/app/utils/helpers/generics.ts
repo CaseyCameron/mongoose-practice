@@ -10,7 +10,7 @@ export const checkIfNameExists = async <T>(
 ): Promise<boolean | void> => {  
   let exists = false
   const results = await model.find({ name })
-
+  
   if (method === 'POST') {
     if (results.length) exists = true
   } else {

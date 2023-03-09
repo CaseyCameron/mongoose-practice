@@ -20,6 +20,7 @@ describe('Mode tests', () => {
   it('should post a mode', async () => {
     const res = await request(app).post(MODE_ROUTE).send(modeToPost)
 
+    expect(res.status).toBe(201)
     expect(res.body).toEqual(modePostResponse)
   })
   it('should get a mode by id', async () => {
@@ -27,11 +28,13 @@ describe('Mode tests', () => {
     const mode = body.modes[0]
     const res = await request(app).get(MODE_ROUTE + `/${mode._id}`)
 
+    expect(res.status).toBe(200)
     expect(res.body).toEqual({ message: 'Success', mode })
   })
   it('should get all modes', async () => {
     const res = await request(app).get(MODE_ROUTE)
 
+    expect(res.status).toBe(200)
     expect(res.body).toEqual(modeGetAllResponse)
   })
   it('should update a mode', async () => {
@@ -43,7 +46,8 @@ describe('Mode tests', () => {
         ...mode,
         name: 'Lydian',
       })
-
+    
+    expect(res.status).toBe(200)
     expect(res.body).toEqual({
       message: 'Success',
       mode: { ...mode, name: 'Lydian' },
@@ -72,7 +76,8 @@ describe('Mode exception tests', () => {
 
   it('should receive an error when posting without a name', async () => {
     const res = await request(app).post(MODE_ROUTE).send({ name: '' })
-
+    
+    expect(res.status).toBe(500)
     expect(res.body).toEqual({
       message: 'Mode validation failed: name: Path `name` is required.',
     })
@@ -81,18 +86,20 @@ describe('Mode exception tests', () => {
     await request(app).post(MODE_ROUTE).send(modeToPost)
 
     const res = await request(app).post(MODE_ROUTE).send(modeToPost)
-
+    expect(res.status).toBe(500)
     expect(res.body).toEqual({ message: 'Dorian already exists' })
   })
   it('should get appropriate message when mode not found by id', async () => {
     const res = await request(app).get(MODE_ROUTE + '/6407881015de82cce302b882')
 
+    expect(res.status).toBe(500)
     expect(res.body).toEqual({ message: 'Mode not found' })
   })
   it('should appropriate message when there are no modes', async () => {
     await request(app).delete(MODE_ROUTE)
     const res = await request(app).get(MODE_ROUTE)
-
+    
+    expect(res.status).toBe(200)
     expect(res.body).toEqual({ message: 'There are no modes yet' })
   })
   it('should receive appropriate error when updating a mode not found', async () => {

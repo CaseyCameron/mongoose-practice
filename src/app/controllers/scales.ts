@@ -1,7 +1,13 @@
 import { Scale } from '../../db/models'
 import { Request, Response, NextFunction } from 'express'
 import { Types } from 'mongoose'
-import { checkIfNameExists, deleteCollectionResponse, deleteDocumentResponse, handleCollectionResponse, handleDocumentResponse } from '../utils/helpers/generics'
+import { 
+  checkIfNameExists,
+  deleteCollectionResponse,
+  deleteDocumentResponse,
+  handleCollectionResponse,
+  handleDocumentResponse
+} from '../utils/helpers/generics'
 import { checkForScaleErrors } from '../utils/helpers/scales'
 
 export const scalesController = {

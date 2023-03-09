@@ -33,7 +33,7 @@ export const modesController = {
     const _id = req.params._id
     const mode = await Mode.findOneAndUpdate({ _id }, req.body, { new: true })
 
-  await handleDocumentResponse(mode, Mode, res, next)
+    await handleDocumentResponse(mode, Mode, res, next)
   },
   deleteMode: async (req: Request, res: Response, next: NextFunction) => {
     const _id = req.params._id

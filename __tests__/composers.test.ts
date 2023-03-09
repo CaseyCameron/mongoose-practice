@@ -28,22 +28,20 @@ const postAComposer = async () => {
 }
 
 describe('Composer tests', () => {
-  beforeAll(async () => {
-    await seedCollections()
-  })
   beforeEach(async () => {
+    await seedCollections()
     await request(app).post(COMPOSER_ROUTE).send(composerOne)
     await request(app).post(COMPOSER_ROUTE).send(composerTwo)
   })
   afterEach(async () => {
     await request(app).delete(COMPOSER_ROUTE)
-  })
-  afterAll(async () => {
     await clearCollections()
   })
 
   it('should post a composer', async () => {
     const res = await postAComposer()
+
+    expect(res.status).toBe(201)
     expect(res.body).toEqual(composerPostResponse)
   })
   it('should get a composer by id', async () => {
@@ -66,6 +64,7 @@ describe('Composer tests', () => {
   it('should get all composers', async () => {
     const res = await request(app).get(COMPOSER_ROUTE)
 
+    expect(res.status).toBe(200)
     expect(res.body).toEqual(composerGetAllResponse)
   })
   it('should update a composer', async () => {
@@ -78,6 +77,7 @@ describe('Composer tests', () => {
         name: 'Tommy Two Socks',
       })
 
+    expect(res.status).toBe(200)
     expect(res.body).toEqual({
       message: 'Success',
       composer: {
@@ -112,15 +112,16 @@ describe('Composer exception tests', () => {
   it('should receive an error when posting without a name', async () => {
     const res = await request(app).post(COMPOSER_ROUTE).send({ name: '' })
 
+    expect(res.status).toBe(500)
     expect(res.body).toEqual({
       message: 'Invalid value',
     })
   })
   it('should receive an error when posting a duplicate name', async () => {
     await request(app).post(COMPOSER_ROUTE).send(composerToPost)
-
     const res = await request(app).post(COMPOSER_ROUTE).send(composerToPost)
 
+    expect(res.status).toBe(500)
     expect(res.body).toEqual({ message: 'John Adams already exists' })
   })
   it('should get appropriate message when composer not found by id', async () => {
@@ -128,18 +129,24 @@ describe('Composer exception tests', () => {
       COMPOSER_ROUTE + '/6407881015de82cce302b882'
     )
 
+    expect(res.status).toBe(500)
     expect(res.body).toEqual({ message: 'Composer not found' })
   })
   it('should appropriate message when there are no composers', async () => {
     await request(app).delete(COMPOSER_ROUTE)
     const res = await request(app).get(COMPOSER_ROUTE)
 
+    expect(res.status).toBe(200)
     expect(res.body).toEqual({ message: 'There are no composers yet' })
   })
   it('should receive appropriate error when updating a composer not found', async () => {
     const res = await request(app)
       .put(COMPOSER_ROUTE + '/6407881015de82cce302b882')
-      .send({ _id: '6407881015de82cce302b882', name: 'New Composer Name', dob: new Date('March 5, 2021') })
+      .send({
+        _id: '6407881015de82cce302b882',
+        name: 'New Composer Name',
+        dob: new Date('March 5, 2021'),
+      })
 
     expect(res.status).toEqual(500)
     expect(res.body).toEqual({ message: 'Composer not found' })

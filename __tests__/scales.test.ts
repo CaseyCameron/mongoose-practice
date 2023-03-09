@@ -26,18 +26,21 @@ describe('Scale tests', () => {
   it('should post a scale', async () => {
     const res = await request(app).post(SCALE_ROUTE).send(scaleToPost)
 
+    expect(res.status).toBe(201)
     expect(res.body).toEqual(scalePostResponse)
   })
   it('should get a scale by id', async () => {
     const { body } = await request(app).get(SCALE_ROUTE)
     const scale = body.scales[0]
     const res = await request(app).get(SCALE_ROUTE + `/${scale._id}`)
-
+    
+    expect(res.status).toBe(200)
     expect(res.body).toEqual(scaleGetResponse)
   })
   it('should get all scales', async () => {
     const res = await request(app).get(SCALE_ROUTE)
 
+    expect(res.status).toBe(200)
     expect(res.body).toEqual(scaleGetAllResponse)
   })
   it('should update a scale', async () => {
@@ -49,7 +52,8 @@ describe('Scale tests', () => {
         ...scale,
         name: 'Harmonic Minor',
       })
-
+    
+    expect(res.status).toBe(200)
     expect(res.body).toEqual({
       message: 'Success',
       scale: { ...scale, name: 'Harmonic Minor', modes: expect.any(Array) },
@@ -75,6 +79,7 @@ describe('Scales exception tests', () => {
   it('should receive an error when posting without a name', async () => {
     const res = await request(app).post(SCALE_ROUTE).send({ name: '' })
 
+    expect(res.status).toBe(500)
     expect(res.body).toEqual({
       message: 'A required field was entered without a value',
     })
@@ -85,19 +90,22 @@ describe('Scales exception tests', () => {
 
     const res = await request(app).post(SCALE_ROUTE).send(scaleToPost)
 
+    expect(res.status).toBe(500)
     expect(res.body).toEqual({ message: 'Ionian already exists' })
   })
   it('should get appropriate message when scale not found by id', async () => {
     const res = await request(app).get(
       SCALE_ROUTE + '/6407881015de82cce302b882'
     )
-
+    
+    expect(res.status).toBe(500)
     expect(res.body).toEqual({ message: 'Scale not found' })
   })
   it('should appropriate message when there are no scales', async () => {
     await request(app).delete(SCALE_ROUTE)
     const res = await request(app).get(SCALE_ROUTE)
 
+    expect(res.status).toBe(200)
     expect(res.body).toEqual({ message: 'There are no scales yet' })
   })
   it('should receive appropriate error when updating a scale not found', async () => {

@@ -26,7 +26,8 @@ export const genresController = {
       message: 'Success',
       genre,
     })
-  },  getGenreById: async (req: Request, res: Response, next: NextFunction) => {
+  },  
+  getGenreById: async (req: Request, res: Response, next: NextFunction) => {
     const _id = req.params._id
     const genre = await Genre.findOne({ _id })
 

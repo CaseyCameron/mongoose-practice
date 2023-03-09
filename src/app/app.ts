@@ -16,7 +16,7 @@ const routePrefix = '/api/v1'
 const app = express()
 app.use(cors())
 app.use(helmet())
-// app.use(morgan('dev'))
+app.use(morgan('dev'))
 app.use(express.json())
 
 app.get(routePrefix, heartbeat)

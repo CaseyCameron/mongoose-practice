@@ -4,7 +4,6 @@ import { body } from 'express-validator'
 import { catchErrors } from '../utils/handlers/catchErrors'
 
 const router = Router()
-
 const validationCriteria = [body('name').notEmpty(), body('origin').notEmpty()]
 
 router.post('/', validationCriteria, catchErrors(genresController.addGenre))

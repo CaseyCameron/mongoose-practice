@@ -75,6 +75,13 @@ export const composerGetAllResponse = {
   message: 'Success',
   composers: [
     {
+      name: 'Johnny Appleseed',
+      dob: expect.any(String),
+      scalesUsed: [],
+      musicGenres: [],
+      ...mongooseProps,
+    },
+    {
       name: 'Cool Composer',
       dob: expect.any(String),
       scalesUsed: [],
