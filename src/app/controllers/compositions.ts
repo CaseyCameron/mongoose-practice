@@ -4,7 +4,6 @@ import {
   checkIfNameExists,
   deleteCollectionResponse,
   handleCollectionResponse,
-  deleteDocumentResponse,
   handleDocumentResponse,
 } from '../utils/helpers/generics'
 import { handleValidation } from '../utils/handlers/catchErrors'
@@ -39,6 +38,18 @@ export const compositionsController = {
     const compositions = await Composition.find({})
 
     await handleCollectionResponse(compositions, Composition, res)
+  },
+  editComposition: async (req: Request, res: Response, next: NextFunction) => {
+    const _id = req.params._id
+    const compositionName = req.body.name
+
+    await checkIfNameExists(Composition, compositionName, req.method, next, _id)
+    handleValidation(req, next)
+
+    const composition = await Composition.findOneAndUpdate({ _id }, req.body, {
+      new: true,
+    })
+    await handleDocumentResponse(composition, Composition, res, next)
   },
   deleteAllCompositions: async (
     req: Request,

@@ -1,7 +1,7 @@
 import request from 'supertest'
 import app from '../../app'
 import { seedComposer } from './composersData'
-import { COMPOSER_ROUTE, COMPOSITION_ROUTE } from '../helpers/index'
+import { COMPOSER_ROUTE } from '../helpers/index'
 import { mongooseProps } from './composersData'
 
 export const seedDataForComposition = async () => {
@@ -46,4 +46,20 @@ export const compositionPostResponse = {
     scalesUsed: expect.any(Array),
     ...mongooseProps,
   },
+}
+
+const dummyComposition = {
+    name: '',
+    composer: expect.any(String),
+    musicGenres: expect.any(Array),
+    scalesUsed: expect.any(Array),
+    ...mongooseProps,
+}
+
+export const compositionGetAllResponse = {
+  message: 'Success',
+  compositions: [
+    {...dummyComposition, name: 'Pretty Good Composition' },
+    {...dummyComposition, name: 'An Okay Composition' },
+  ]
 }

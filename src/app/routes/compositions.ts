@@ -13,6 +13,7 @@ router.post(
 )
 router.get('/:_id', catchErrors(compositionsController.getComposition))
 router.get('/', catchErrors(compositionsController.getCompositions))
+router.put('/:_id', validationCriteria, catchErrors(compositionsController.editComposition))
 router.delete('/', catchErrors(compositionsController.deleteAllCompositions))
 
 export const compositionsRouter = router
